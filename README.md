@@ -1,2 +1,2 @@
 # osfetch
-this is a fetching system that i made with posix shell
+a stupid system fetch program written in Posix shell for linux
