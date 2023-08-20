@@ -1,0 +1,99 @@
+#!/bin/sh
+
+LC_ALL=C
+LANG=C
+
+parse_rc() {
+	for f in "$@"; do
+		wm="$(tail -n 1 "$f" 2> /dev/null)"
+    wm="${wm%\  }"
+    wm="${wm## \ }"
+		[ -n "$wm" ] && printf "$wm" && return
+	done
+}
+
+has() {
+  command -v "$1" >/dev/null 2>&1 && [ -x "$(command -v "$1")" ]
+}
+
+get_package() {
+  {
+    has pacman-key && pacman -Qq
+    has dpkg && dpkg-query -f '.\n' -W
+    has rpm && rpm -qa
+    has apk && apk info
+
+    has emerge && printf '%s\n' /var/db/pkg/*/*/
+    has kiss && printf '%s\n' /var/db/kiss/installed/*/
+    has brew && printf '%s\n' "$(brew --cellar)/"*
+
+    has nix-store && {
+      nix-store -q --requisites /run/current-system/sw 
+      nix-store -q --requisites ~/.nix-profile
+    }
+  } | wc -l
+}
+
+host="${HOSTNAME:-$(hostname:-$(hostname))}"
+user="${USER:-$(id -un)}"
+os="$(sed -n '2p' /etc/os-release)"
+kernel="$(uname -sr)"
+uptime="$(uptime --pretty)"
+packages="$(get_package)"
+shell="$SHELL"
+
+packages="${packages#${packages%%[![:space:]]*}}"
+packages="${packages%${packages##*[![:space:]]}}"
+uptime="${uptime//up }"
+shell=${shell%"${shell##*[!/]}"}
+shell=${shell##*/}
+shell=${shell%"${2/"$shell"}"}
+os=${os##PRETTY_NAME=}
+os=${os//\"}
+
+rcwm="$(parse_rc "$HOME/.xinitrc" "$HOME/.xsession")"
+
+ui='unknown'
+uitype='UI'
+if [ -n "$DE" ]; then
+	ui="$DE"
+	uitype='DE'
+elif [ -n "$WM" ]; then
+	ui="$WM"
+	uitype='WM'
+elif [ -n "$DESKTOP_SESSION" ] || [ -n "$XDG_CURRENT_DESKTOP" ]; then
+	ui="${DESKTOP_SESSION:-${XDG_CURRENT_DESKTOP}}"
+	uitype='DE'
+elif [ -n "$rcwm" ]; then
+	ui="${rcwm}"
+	uitype='WM'
+elif [ -n "$XDG_SESSION_TYPE" ]; then
+	ui="$XDG_SESSION_TYPE"
+fi
+
+ui="$(basename $ui)"
+
+GREEN="\x1B[32m"
+YELLOW="\x1B[33m"
+YELLOW_BRIGHT="\x1B[93m"
+BLUE="\x1B[34m"
+CYAN="\033[36m"
+RED="\033[1;31m"
+WHITE="\x1B[37m"
+BOLD="\x1B[1m"
+RESET="\x1B[0m"
+
+logo_color="$GREEN"
+reset="$RESET"
+userhost="$BOLD"
+info="$BOLD"
+
+printf "
+$logo_color #######   ###### $reset $userhost$user$reset@$userhost$host$reset
+$logo_color##     ## ##    ##$reset ${info}OS/DISTRO:  $RESET$os$RESET
+$logo_color##     ## ##      $reset ${info}KERNEL:     $RESET$kernel$RESET
+$logo_color##     ##  ###### $reset ${info}UPTIME:     $RESET$uptime$RESET
+$logo_color##     ##       ##$reset ${info}PACKAGES:   $RESET$packages$RESET
+$logo_color##     ## ##    ##$reset ${info}SHELL:      $RESET$shell$RESET
+$logo_color #######   ###### $reset ${info}$uitype:         $RESET$ui$RESET
+"
