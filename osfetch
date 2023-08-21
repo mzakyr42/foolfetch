@@ -22,6 +22,7 @@ get_package() {
     has dpkg && dpkg-query -f '.\n' -W
     has rpm && rpm -qa
     has apk && apk info
+    has xbps-query && xbps-query -l
 
     has emerge && printf '%s\n' /var/db/pkg/*/*/
     has kiss && printf '%s\n' /var/db/kiss/installed/*/
