@@ -86,11 +86,11 @@ RESET="\x1B[0m"
 
 logo_color="$GREEN"
 reset="$RESET"
-userhost="$BOLD"
+userandhost="$BOLD"
 info="$BOLD"
 
 printf "
-$logo_color #######   ###### $reset $userhost$user$reset@$userhost$host$reset
+$logo_color #######   ###### $reset $userandhost$user$reset@$userandhost$host$reset
 $logo_color##     ## ##    ##$reset ${info}OS/DISTRO:  $RESET$os$RESET
 $logo_color##     ## ##      $reset ${info}KERNEL:     $RESET$kernel$RESET
 $logo_color##     ##  ###### $reset ${info}UPTIME:     $RESET$uptime$RESET
