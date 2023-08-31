@@ -85,16 +85,14 @@ BOLD="\x1B[1m"
 RESET="\x1B[0m"
 
 logo_color="$GREEN"
-reset="$RESET"
-userandhost="$BOLD"
 info="$BOLD"
 
 printf "
-$logo_color #######   ###### $reset $userandhost$user$reset@$userandhost$host$reset
-$logo_color##     ## ##    ##$reset ${info}OS/DISTRO:  $RESET$os$RESET
-$logo_color##     ## ##      $reset ${info}KERNEL:     $RESET$kernel$RESET
-$logo_color##     ##  ###### $reset ${info}UPTIME:     $RESET$uptime$RESET
-$logo_color##     ##       ##$reset ${info}PACKAGES:   $RESET$packages$RESET
-$logo_color##     ## ##    ##$reset ${info}SHELL:      $RESET$shell$RESET
-$logo_color #######   ###### $reset ${info}$uitype:         $RESET$ui$RESET
+$logo_color #######   ###### $RESET $info$user$reset@$info$host$reset
+$logo_color##     ## ##    ##$RESET ${info}OS/DISTRO:  $RESET$os$RESET
+$logo_color##     ## ##      $RESET ${info}KERNEL:     $RESET$kernel$RESET
+$logo_color##     ##  ###### $RESET ${info}UPTIME:     $RESET$uptime$RESET
+$logo_color##     ##       ##$RESET ${info}PACKAGES:   $RESET$packages$RESET
+$logo_color##     ## ##    ##$RESET ${info}SHELL:      $RESET$shell$RESET
+$logo_color #######   ###### $RESET ${info}$uitype:         $RESET$ui$RESET
 "
