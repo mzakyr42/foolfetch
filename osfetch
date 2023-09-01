@@ -35,8 +35,7 @@ get_package() {
   } | wc -l
 }
 
-host="${HOSTNAME:-$(hostname:-$(hostname))}"
-user="${USER:-$(id -un)}"
+userandhost="${HOSTNAME:-$(hostname:-$(hostname))}@${USER:-$(id -un)}"
 os="$(sed -n '2p' /etc/os-release)"
 kernel="$(uname -sr)"
 uptime="$(uptime --pretty)"
@@ -88,7 +87,7 @@ logo_color="$GREEN"
 info="$BOLD"
 
 printf "
-$logo_color #######   ###### $RESET $info$user$reset@$info$host$reset
+$logo_color #######   ###### $RESET $info$userandhost$reset
 $logo_color##     ## ##    ##$RESET ${info}OS/DISTRO:  $RESET$os$RESET
 $logo_color##     ## ##      $RESET ${info}KERNEL:     $RESET$kernel$RESET
 $logo_color##     ##  ###### $RESET ${info}UPTIME:     $RESET$uptime$RESET
