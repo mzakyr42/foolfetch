@@ -35,7 +35,7 @@ get_package() {
   } | wc -l
 }
 
-userandhost="${HOSTNAME:-$(hostname:-$(hostname))}@${USER:-$(id -un)}"
+userandhost="${USER:-$(id -un)}@${HOSTNAME:-$(hostname:-$(hostname))}"
 os="$(sed -n '2p' /etc/os-release)"
 kernel="$(uname -sr)"
 uptime="$(uptime --pretty)"
