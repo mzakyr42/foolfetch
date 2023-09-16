@@ -87,7 +87,7 @@ logo_color="$GREEN"
 info="$BOLD"
 
 printf "
-$logo_color########  #######   #######  ##      $RESET $info$userandhost$reset
+$logo_color########  #######   #######  ##      $RESET $info$userandhost$RESET
 $logo_color##       ##     ## ##     ## ##      $RESET ${info}OS/DISTRO:  $RESET$os$RESET
 $logo_color##       ##     ## ##     ## ##      $RESET ${info}KERNEL:     $RESET$kernel$RESET
 $logo_color######   ##     ## ##     ## ##      $RESET ${info}UPTIME:     $RESET$uptime$RESET
